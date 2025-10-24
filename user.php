@@ -82,6 +82,9 @@ if ($_SESSION['logged_in'] == true) {
                 <th>
                     Updated At
                 </th>
+                <th>
+                    See Thread
+                </th>
             </tr>
         
         ";
@@ -93,6 +96,7 @@ if ($_SESSION['logged_in'] == true) {
             echo "<td>{$row['status']}</td>";
             echo "<td>{$row['created_at']}</td>";
             echo "<td>{$row['updated_at']}</td>";
+            echo "<td> <a href='thread.php?id={$row['id']}'>Open Thread</a></td>";
             echo "</tr>";
         }
         echo "</table>";

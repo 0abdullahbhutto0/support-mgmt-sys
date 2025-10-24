@@ -38,7 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $result =  mysqli_query($conn, $sql);
         $row = mysqli_fetch_assoc($result);
 
-        #var_dump($pass);
         if (!isset($row['password'])) {
             echo "Invalid username";
             exit();

@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LiveSupport Sign Up</title>
 </head>
+
 <body>
     <form action="signup.php" method="post">
         <h1>LiveSupport Sign Up</h1>
@@ -18,6 +20,7 @@
         <input type="submit" name="login" value="Go to Login">
     </form>
 </body>
+
 </html>
 
 
@@ -27,13 +30,15 @@ include("database.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $name = $_POST['name'];
-    if (empty($username) || empty($password)||empty($name)) {
+    $username = mysqli_real_escape_string($conn, $_POST['username']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
+    $name = mysqli_real_escape_string($conn, $_POST['name']);
+    if (empty($username) || empty($password) || empty($name)) {
         echo "Please enter all the credentials.";
     } else {
-        $sql = "INSERT INTO users(name, username, password, role) VALUES('$name','$username', '$password', 'user')";
+        #echo $username;
+        $sql = "INSERT INTO users(name, username, password, role) VALUES('{$_POST['name']}','{$_POST['username']}', '{$_POST['password']}', 'user')";
+        #echo $sql;
         try {
             mysqli_query($conn, $sql);
             echo "Registered!";
@@ -48,11 +53,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['id'] = $id;
             header("Location: user.php");
             exit();
-        } catch (mysqli_sql_exception) {
-            echo "Username Already taken.";
+        } catch (mysqli_sql_exception $e) {
+            echo $e->getMessage() .  "Username Already taken.";
         }
     }
-}
+    }
+
 
 if (isset($_POST['login'])) {
     session_destroy();

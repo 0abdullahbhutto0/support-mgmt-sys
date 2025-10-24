@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Please enter all the credentials.";
     } else {
 
-        $sql = "SELECT password, name FROM users WHERE username = '$username'";
+        $sql = "SELECT password, name, id FROM users WHERE username = '$username'";
         $result =  mysqli_query($conn, $sql);
         $row = mysqli_fetch_assoc($result);
         if (!isset($row['password'])) {
@@ -41,6 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         $pass = $row['password'];
         $name = $row['name'];
+        $id = $row['id'];
 
         #var_dump($pass);
         if ($password == $pass) {
@@ -48,6 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['username'] = $username;
             $_SESSION['name'] = $name;
             $_SESSION['logged_in'] = true;
+            $_SESSION['id'] = $id;
             $_SESSION['role'] = 'admin';
             header("Location: user.php");
             exit();
