@@ -1,27 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LiveSupport Admin</title>
+    <link rel='stylesheet' href='auth.css'>
+    <script src="https://kit.fontawesome.com/37d0d17982.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
-    <form action="adminlogin.php" method="post">
-        <h1>LiveSupport Admin Log In</h1>
-        <label>Username:</label>
-        <input type="text" name="username">
-        <label>Password:</label>
-        <input type="password" name="password">
-        <input type="submit" name="submit" value="Login">
-        <input type="submit" name="login" value="Go to User Log in">
-    </form>
+    <div class='form-container'>
+        <form action="adminlogin.php" method="post">
+            <h1><i class='fa-solid fa-user'></i><br>LiveSupport<br> Admin Log In</h1>
+            <label>Username:</label>
+            <input type="text" name="username">
+            <label>Password:</label>
+            <input type="password" name="password">
+            <input type="submit" name="submit" value="Login">
+            <input type="submit" name="login" value="Go to User Log in">
+        </form>
+    </div>
 </body>
+
 </html>
 
 <?php
 session_start();
 if (isset($_SESSION['logged_in'])) {
-    $_SESSION['logged_in']=false;
+    $_SESSION['logged_in'] = false;
 }
 include("database.php");
 

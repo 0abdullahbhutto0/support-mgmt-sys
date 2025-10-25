@@ -5,18 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LiveSupport Log In</title>
+    <link rel='stylesheet' href='auth.css'>
+    <script src="https://kit.fontawesome.com/37d0d17982.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <form action="login.php" method="post">
-        <h1>LiveSupport Log In</h1>
-        <label>Username:</label>
-        <input type="text" name="username">
-        <label>Password:</label>
-        <input type="password" name="password">
-        <input type="submit" name="submit" value="Login">
-        <input type="submit" name="signup" value="Go to Sign Up">
-    </form>
+    <div class='form-container'>
+        <form action="login.php" method="post">
+            <h1><i class='fa-solid fa-user'></i><br>LiveSupport Log In</h1>
+            <label>Username:</label>
+            <input type="text" name="username">
+            <label>Password:</label>
+            <input type="password" name="password">
+            <input type="submit" name="submit" value="Login">
+            <input type="submit" name="signup" value="Go to Sign Up">
+        </form>
+    </div>
 </body>
 
 </html>
@@ -44,8 +48,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         $pass = $row['password'];
         $name = $row['name'];
-        $id=$row['id'];
-        $role=$row['role'];
+        $id = $row['id'];
+        $role = $row['role'];
         if ($password == $pass) {
             echo "Logged IN";
             $_SESSION['username'] = $username;

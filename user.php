@@ -5,13 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LiveSupport</title>
-    <style>
-        table, td, th{
-            border: 1px solid;
-            border-collapse:collapse;
-
-        }
-    </style>
+    <link rel='stylesheet' href='admin_styles.css'>
 </head>
 
 <body>
@@ -28,11 +22,14 @@ if ($_SESSION['logged_in'] == true) {
     if ($_SESSION['role'] == 'user') {
         $name = $_SESSION['name'];
         $id = $_SESSION['id'];
+        echo "<nav>";
+        echo "<h2>LiveSupport</h2>";
         echo "<h2>Hello {$name}</h2>";
         echo "<form action='user.php' method='post'>
             <input type='submit' name='logout' value='Logout'>
         </form>";
-        echo "<h3>Facing an issue? Create a Ticket!</h3>";
+        echo "</nav>";
+        echo "<h3 class='resolved-head'>Facing an issue? Create a Ticket!</h3>";
         echo
         "
         <div class='createticket-container'>
@@ -59,10 +56,12 @@ if ($_SESSION['logged_in'] == true) {
                 echo "Please enter all the details";
             }
         }
-        echo "<h2>Your Tickets</h2>";
+        echo "<h2 class='resolved-head'>Your Tickets</h2>";
         $sql = "SELECT * FROM tickets WHERE user_id = $id";
         $result = mysqli_query($conn, $sql);
-        echo "<table>
+        echo "
+        <div class='ticket-container'>
+        <table>
             <tr>
                 <th>
                     Ticket ID
@@ -99,7 +98,7 @@ if ($_SESSION['logged_in'] == true) {
             echo "<td> <a href='thread.php?id={$row['id']}'>Open Thread</a></td>";
             echo "</tr>";
         }
-        echo "</table>";
+        echo "</table></div>";
     }
     if ($_SESSION['role'] == 'admin') {
         header("Location: admin.php");

@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,13 +8,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LiveSupport Admin</title>
-     <style>
-        table, td, th{
-            border: 1px solid;
-            border-collapse:collapse;
-
-        }
-    </style>
+    <link rel='stylesheet' href='admin_styles.css'>
+    <script src="https://kit.fontawesome.com/37d0d17982.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -21,23 +19,81 @@
 </html>
 
 <?php
-session_start();
 include("database.php");
+
+function ticket_info()
+{
+    include("database.php");
+    $sql = "SELECT status FROM tickets";
+    $result = mysqli_query($conn, $sql);
+    $total_tickets = mysqli_num_rows($result);
+    $num_sent = 0;
+    $num_receive = 0;
+    $num_inprog = 0;
+    $num_resolved = 0;
+    while ($row = mysqli_fetch_assoc($result)) {
+        if ($row['status'] == 'Sent') {
+            $num_sent++;
+        }
+        if ($row['status'] == 'Received by Admin') {
+            $num_receive++;
+        }
+        if ($row['status'] == 'In Progress') {
+            $num_inprog++;
+        }
+        if ($row['status'] == 'Resolved') {
+            $num_resolved++;
+        }
+    }
+    echo
+    "<div class='num-container'>
+        <div style='background: #dbeafe; border-color: #93c5fd; color: #1e40af;'>
+           Total Tickets: {$total_tickets}
+        </div>
+        <div style='background: #fef3c7; border-color: #fcd34d; color: #b45309;'>
+            Pending: {$num_sent}
+        </div>
+        <div style='background: #cffafe; border-color: #67e8f9; color: #0e7490;'>
+            Received: {$num_receive}
+        </div>
+        <div style='background: #e9d5ff; border-color: #c084fc; color: #7e22ce;'>
+            In Progress: {$num_inprog}
+        </div>
+        <div style='background: #d1fae5; border-color: #6ee7b7; color: #047857;'>
+            Resolved: {$num_resolved}
+        </div>
+    
+    </div>";
+}
 if ($_SESSION['logged_in'] == 'true') {
     if ($_SESSION['role'] == 'admin') {
-        echo "<h2>Hello Admin: {$_SESSION['name']}</h2><br>";
+        echo "<nav>";
+        echo "<h2>LiveSupport</h2>";
+        echo "<h2>Hello Admin: {$_SESSION['name']}</h2>";
         echo "<form action='admin.php' method='post'>
             <input type='submit' name='logout' value='Logout'>
         </form>";
-        echo "<br><h3>Tickets</h3>";
-        if(isset($_POST['logout'])){
+        echo "</nav>";
+        echo "<div class='tickets-heading'><h3>Open Tickets</h3></div>";
+        ticket_info();
+        if (isset($_POST['logout'])) {
             session_destroy();
             header("Location: index.php");
             exit();
         }
+
         $sql = "SELECT t.*, u.name, u.username FROM tickets t INNER JOIN users u ON t.user_id = u.id";
-        $result=mysqli_query($conn, $sql);
-        echo "<table>
+        $result = mysqli_query($conn, $sql);
+        $resolved_tickets = [];
+        $open_tickets = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            if ($row['status'] == 'Resolved') {
+                $resolved_tickets[] = $row;
+            } else {
+                $open_tickets[] = $row;
+            }
+        }
+        echo "<div class='ticket-container'><table>
             <tr>
                 <th>
                     Ticket ID
@@ -63,7 +119,7 @@ if ($_SESSION['logged_in'] == 'true') {
             </tr>
         
         ";
-        while ($row = mysqli_fetch_assoc($result)) {
+        foreach ($open_tickets as $row) {
             echo "<tr>";
             echo "<td>{$row['id']}</td>";
             echo "<td>{$row['username']}</td>";
@@ -74,8 +130,25 @@ if ($_SESSION['logged_in'] == 'true') {
             echo "<td> <a href='thread.php?id={$row['id']}'>Open Thread</a></td>";
             echo "</tr>";
         }
-        echo "</table>";
-    }else{
+        echo "</table></div>";
+        echo "
+        <h2 class='resolved-head'>Resolved Tickets</h2>
+         <div class='resolved-section'>
+
+        ";
+        foreach ($resolved_tickets as $row) {
+            echo "
+            <div class='resolved-card'>
+                <h4> {$row['subject']}</h4>
+                <p><strong>By:</strong>  {$row['username']}</p>
+                <p><strong>Resolved:</strong> {$row['updated_at']}</p>
+                <a href='thread.php?id={$row['id']}'>View Thread</a>
+            </div>
+                
+                ";
+        }
+        echo "</div>";
+    } else {
         echo "User doesnt have admin privileges";
         echo "<br><a href='user.php'>Go back to User Page</a>";
     }
