@@ -17,6 +17,43 @@
 <?php
 session_start();
 include("database.php");
+function ticket_table($open_tickets)
+{
+    echo "<div class='ticket-container'><table>
+            <tr>
+                <th>
+                    Ticket ID
+                </th>
+                <th>
+                    Subject
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Created At
+                </th>
+                <th>
+                    Updated At
+                </th>
+                <th>
+                    Thread
+                </th>
+            </tr>
+        
+        ";
+    foreach ($open_tickets as $row) {
+        echo "<tr>";
+        echo "<td>{$row['id']}</td>";
+        echo "<td>{$row['subject']}</td>";
+        echo "<td>{$row['status']}</td>";
+        echo "<td>{$row['created_at']}</td>";
+        echo "<td>{$row['updated_at']}</td>";
+        echo "<td> <a href='thread.php?id={$row['id']}'>Open Thread</a></td>";
+        echo "</tr>";
+    }
+    echo "</table></div>";
+}
 
 if ($_SESSION['logged_in'] == true) {
     if ($_SESSION['role'] == 'user') {
@@ -42,7 +79,7 @@ if ($_SESSION['logged_in'] == true) {
             </form>
         </div>
         ";
-        if(isset($_POST['logout'])){
+        if (isset($_POST['logout'])) {
             session_destroy();
             header("Location: index.php");
             exit();
@@ -56,49 +93,92 @@ if ($_SESSION['logged_in'] == true) {
                 echo "Please enter all the details";
             }
         }
-        echo "<h2 class='resolved-head'>Your Tickets</h2>";
         $sql = "SELECT * FROM tickets WHERE user_id = $id";
         $result = mysqli_query($conn, $sql);
-        echo "
-        <div class='ticket-container'>
-        <table>
-            <tr>
-                <th>
-                    Ticket ID
-                </th>
-                <th>
-                    Subject
-                </th>
-                <th>
-                    Description
-                </th>
-                <th>
-                    Status
-                </th>
-                <th>
-                    Created At
-                </th>
-                <th>
-                    Updated At
-                </th>
-                <th>
-                    See Thread
-                </th>
-            </tr>
-        
-        ";
+        $resolved_tickets = [];
+        $open_tickets = [];
         while ($row = mysqli_fetch_assoc($result)) {
-            echo "<tr>";
-            echo "<td>{$row['id']}</td>";
-            echo "<td>{$row['subject']}</td>";
-            echo "<td>{$row['description']}</td>";
-            echo "<td>{$row['status']}</td>";
-            echo "<td>{$row['created_at']}</td>";
-            echo "<td>{$row['updated_at']}</td>";
-            echo "<td> <a href='thread.php?id={$row['id']}'>Open Thread</a></td>";
-            echo "</tr>";
+            if ($row['status'] == 'Resolved') {
+                $resolved_tickets[] = $row;
+            } else {
+                $open_tickets[] = $row;
+            }
         }
-        echo "</table></div>";
+        echo "<h2 class='resolved-head'>Your Open Tickets</h2>";
+        echo
+        "<form action='user.php' method='post'>
+            <div class='searchbar-container'>
+                <input type='text' name='searchbar' placeholder='Search for tickets...'>
+                <input type='submit' name='search' value='Search'>
+            </div>
+        </form>";
+        if (count($open_tickets) == 0) {
+            echo "<h2>You dont have any open tickets right now.</h2>";
+        } else {
+            if (isset($_POST['search'])) {
+                if (!empty($_POST['searchbar'])) {
+                    $search_term = $_POST['searchbar'];
+                    $sql = "SELECT * FROM tickets WHERE user_id = $id AND (subject LIKE '%{$search_term}%' OR id LIKE '%{$search_term}%' OR description LIKE '%{$search_term}%' OR status LIKE '%{$search_term}%')";
+                    $result = mysqli_query($conn, $sql);
+                    echo "<div class='ticket-container'><table>
+                        <tr>
+                            <th>
+                                Ticket ID
+                            </th>
+                            <th>
+                                Subject
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                            <th>
+                                Created At
+                            </th>
+                            <th>
+                                Updated At
+                            </th>
+                            <th>
+                                Thread
+                            </th>
+                        </tr>
+        
+                ";
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        echo "<tr>";
+                        echo "<td>{$row['id']}</td>";
+                        echo "<td>{$row['subject']}</td>";
+                        echo "<td>{$row['status']}</td>";
+                        echo "<td>{$row['created_at']}</td>";
+                        echo "<td>{$row['updated_at']}</td>";
+                        echo "<td> <a href='thread.php?id={$row['id']}'>Open Thread</a></td>";
+                        echo "</tr>";
+                    }
+                    echo "</table></div>";
+                } else {
+                    ticket_table($open_tickets);
+                }
+            }
+            if (!isset($_POST['search'])) {
+                ticket_table($open_tickets);
+            }
+
+        }
+        echo "
+        <h2 class='resolved-head'>Resolved Tickets</h2>
+         <div class='resolved-section'>
+
+        ";
+        foreach ($resolved_tickets as $row) {
+            echo "
+            <div class='resolved-card'>
+                <h4> {$row['subject']}</h4>
+                <p><strong>Resolved:</strong> {$row['updated_at']}</p>
+                <a href='thread.php?id={$row['id']}'>View Thread</a>
+            </div>
+                
+                ";
+        }
+        echo "</div>";
     }
     if ($_SESSION['role'] == 'admin') {
         header("Location: admin.php");

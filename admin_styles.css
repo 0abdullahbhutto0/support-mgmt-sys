@@ -45,6 +45,14 @@ nav input[type="submit"]:hover {
   background: #dc2626;
 }
 
+.test {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  min-height: 80px;
+  background-color: #10b981;
+}
+
 .tickets-heading {
   margin-bottom: 1.5rem;
   padding-left: 0.7rem;
@@ -55,6 +63,7 @@ nav input[type="submit"]:hover {
   color: #1f2937;
   font-size: 1.5rem;
   font-weight: 600;
+  text-align: center;
 }
 
 .ticket-container {
@@ -152,6 +161,37 @@ nav input[type="submit"]:hover {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
+.searchbar-container {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+.searchbar-container input[type="text"] {
+  width: 250px;
+  height: 35px;
+  margin: 10px;
+  border-radius: 8px;
+  border: none;
+  text-decoration: none;
+}
+.searchbar-container input[type='text'] {
+    padding: 0.75rem 1.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+    min-width: 300px;
+}
+
+.searchbar-container input[type='submit'] {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 83px;
+    height: 39px;
+    margin-top: 19px;
+}
 .resolved-section {
   background: #f9fafb;
   padding: 1.5rem;
