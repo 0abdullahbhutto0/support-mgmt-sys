@@ -8,7 +8,7 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LiveSupport Admin</title>
-    <link rel='stylesheet' href='admin_styles.css'>
+    <link rel='stylesheet' href='layout.css'>
     <script src="https://kit.fontawesome.com/37d0d17982.js" crossorigin="anonymous"></script>
 </head>
 
@@ -110,8 +110,8 @@ function ticket_info()
 if ($_SESSION['logged_in'] == 'true') {
     if ($_SESSION['role'] == 'admin') {
         echo "<nav>";
-        echo "<h2>LiveSupport</h2>";
-        echo "<h2>Hello Admin: {$_SESSION['name']}</h2>";
+        echo "<h2><i class='fa-solid fa-headset'></i>LiveSupport</h2>";
+        echo "<h2>Hello, Admin: {$_SESSION['name']}</h2>";
         echo "<form action='admin.php' method='post'>
             <input type='submit' name='logout' value='Logout'>
         </form>";
@@ -143,15 +143,15 @@ if ($_SESSION['logged_in'] == 'true') {
                 <input type='submit' name='search' value='Search'>
             </div>
         </form>";
-        if(count($open_tickets)==0){
-            echo "<h2>You dont have any open tickets right now.</h2>";
-        }else{
-        if (isset($_POST['search'])) {
-            if (!empty($_POST['searchbar'])) {
-                $search_term = $_POST['searchbar'];
-                $sql = "SELECT t.*, u.name, u.username FROM tickets t INNER JOIN users u ON t.user_id = u.id WHERE t.id LIKE '%{$search_term}%' OR u.name LIKE '%{$search_term}%' OR u.username LIKE '%{$search_term}%' OR t.subject LIKE '%{$search_term}%' OR t.status LIKE '%{$search_term}%'";
-                $result = mysqli_query($conn, $sql);
-                echo "<div class='ticket-container'><table>
+        if (count($open_tickets) == 0) {
+            echo "<h2 class='resolved-head'>You dont have any open tickets right now.</h2>";
+        } else {
+            if (isset($_POST['search'])) {
+                if (!empty($_POST['searchbar'])) {
+                    $search_term = $_POST['searchbar'];
+                    $sql = "SELECT t.*, u.name, u.username FROM tickets t INNER JOIN users u ON t.user_id = u.id WHERE t.id LIKE '%{$search_term}%' OR u.name LIKE '%{$search_term}%' OR u.username LIKE '%{$search_term}%' OR t.subject LIKE '%{$search_term}%' OR t.status LIKE '%{$search_term}%'";
+                    $result = mysqli_query($conn, $sql);
+                    echo "<div class='ticket-container'><table>
                         <tr>
                             <th>
                                 Ticket ID
@@ -177,43 +177,49 @@ if ($_SESSION['logged_in'] == 'true') {
                         </tr>
         
                 ";
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<tr>";
-                    echo "<td>{$row['id']}</td>";
-                    echo "<td>{$row['username']}</td>";
-                    echo "<td>{$row['subject']}</td>";
-                    echo "<td>{$row['status']}</td>";
-                    echo "<td>{$row['created_at']}</td>";
-                    echo "<td>{$row['updated_at']}</td>";
-                    echo "<td> <a href='thread.php?id={$row['id']}'>Open Thread</a></td>";
-                    echo "</tr>";
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        echo "<tr>";
+                        echo "<td>{$row['id']}</td>";
+                        echo "<td>{$row['username']}</td>";
+                        echo "<td>{$row['subject']}</td>";
+                        echo "<td>{$row['status']}</td>";
+                        echo "<td>{$row['created_at']}</td>";
+                        echo "<td>{$row['updated_at']}</td>";
+                        echo "<td> <a href='thread.php?id={$row['id']}'>Open Thread</a></td>";
+                        echo "</tr>";
+                    }
+                    echo "</table></div>";
+                } else {
+                    ticket_table($open_tickets);
                 }
-                echo "</table></div>";
-            } else {
+            }
+            if (!isset($_POST['search'])) {
                 ticket_table($open_tickets);
             }
         }
-        if (!isset($_POST['search'])) {
-            ticket_table($open_tickets);
-        }
-    }
-        echo "
+        if (count($resolved_tickets) == 0) {
+            echo "<h2 class='resolved-head'>You dont have any resolved tickets right now.</h2>";
+        } else {
+            echo "
         <h2 class='resolved-head'>Resolved Tickets</h2>
          <div class='resolved-section'>
 
         ";
-        foreach ($resolved_tickets as $row) {
-            echo "
+            foreach ($resolved_tickets as $row) {
+                echo "
             <div class='resolved-card'>
                 <h4> {$row['subject']}</h4>
                 <p><strong>By:</strong>  {$row['username']}</p>
                 <p><strong>Resolved:</strong> {$row['updated_at']}</p>
-                <a href='thread.php?id={$row['id']}'>View Thread</a>
+                <a href='thread.php?id={$row['id']}' style='color: blue;'>View Thread</a><br>
+                <a href='delete.php?id={$row['id']}' style='color: red;'>Delete Ticket</a>
             </div>
                 
                 ";
         }
         echo "</div>";
+
+        }
     } else {
         echo "User doesnt have admin privileges";
         echo "<br><a href='user.php'>Go back to User Page</a>";

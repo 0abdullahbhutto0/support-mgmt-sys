@@ -38,11 +38,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = mysqli_real_escape_string($conn, $_POST['password']);
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     if (empty($username) || empty($password) || empty($name)) {
-        echo "Please enter all the credentials.";
+        echo "<h2 class='resolved-head'>Please enter all the credentials.</h2>";
     } else {
         #echo $username;
         $sql = "INSERT INTO users(name, username, password, role) VALUES('{$_POST['name']}', '{$_POST['username']}', '{$_POST['password']}', 'user')";
-        echo $sql;
         #die();
         try {
             $result = mysqli_query($conn, $sql);
@@ -61,8 +60,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['id'] = $id;
             header("Location: user.php");
             exit();
-        } catch (mysqli_sql_exception $e) {
-            echo $e->getMessage() .  "Username Already taken.";
+        } catch (mysqli_sql_exception) {
+            echo "<h2 class='resolved-head'> Username Already taken.</h2>";
         }
     }
 }

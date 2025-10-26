@@ -5,7 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LiveSupport</title>
-    <link rel='stylesheet' href='admin_styles.css'>
+    <link rel='stylesheet' href='layout.css'>
+    <script
+      src="https://kit.fontawesome.com/37d0d17982.js"
+      crossorigin="anonymous"
+    ></script>
 </head>
 
 <body>
@@ -60,8 +64,8 @@ if ($_SESSION['logged_in'] == true) {
         $name = $_SESSION['name'];
         $id = $_SESSION['id'];
         echo "<nav>";
-        echo "<h2>LiveSupport</h2>";
-        echo "<h2>Hello {$name}</h2>";
+        echo "<h2><i class='fa-solid fa-headset'></i>LiveSupport</h2>";
+        echo "<h2>Hello, {$name}</h2>";
         echo "<form action='user.php' method='post'>
             <input type='submit' name='logout' value='Logout'>
         </form>";
@@ -113,7 +117,7 @@ if ($_SESSION['logged_in'] == true) {
             </div>
         </form>";
         if (count($open_tickets) == 0) {
-            echo "<h2>You dont have any open tickets right now.</h2>";
+            echo "<h2 class='resolved-head'>You dont have any open tickets right now.</h2>";
         } else {
             if (isset($_POST['search'])) {
                 if (!empty($_POST['searchbar'])) {
@@ -161,15 +165,17 @@ if ($_SESSION['logged_in'] == true) {
             if (!isset($_POST['search'])) {
                 ticket_table($open_tickets);
             }
-
         }
-        echo "
+        if (count($resolved_tickets) == 0) {
+            echo "<h2 class='resolved-head'>You dont have any resolved tickets right now.</h2>";
+        } else {
+            echo "
         <h2 class='resolved-head'>Resolved Tickets</h2>
          <div class='resolved-section'>
 
         ";
-        foreach ($resolved_tickets as $row) {
-            echo "
+            foreach ($resolved_tickets as $row) {
+                echo "
             <div class='resolved-card'>
                 <h4> {$row['subject']}</h4>
                 <p><strong>Resolved:</strong> {$row['updated_at']}</p>
@@ -177,8 +183,9 @@ if ($_SESSION['logged_in'] == true) {
             </div>
                 
                 ";
+            }
+            echo "</div>";
         }
-        echo "</div>";
     }
     if ($_SESSION['role'] == 'admin') {
         header("Location: admin.php");

@@ -86,3 +86,11 @@ body {
 .form-container input[name="signup"]:hover {
     background: #eff6ff;
 }
+
+.resolved-head {
+  padding: 10px;
+  margin-bottom: 1rem;
+  color: #374151;
+  font-size: 1.25rem;
+  text-align: center;
+}

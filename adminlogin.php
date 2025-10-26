@@ -36,14 +36,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
     if (empty($username) || empty($password)) {
-        echo "Please enter all the credentials.";
+        echo "<h2 class='resolved-head'>Please enter all the credentials.</h2>";
     } else {
 
         $sql = "SELECT password, name, id FROM users WHERE username = '$username'";
         $result =  mysqli_query($conn, $sql);
         $row = mysqli_fetch_assoc($result);
         if (!isset($row['password'])) {
-            echo "Invalid Admin Info";
+            echo "<h2 class='resolved-head'>Invalid Admin Info</h2>";
             exit();
         }
         $pass = $row['password'];
@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: user.php");
             exit();
         } else {
-            echo "Invalid Admin Info.";
+            echo "<h2 class='resolved-head'>Invalid Admin Info.</h2>";
         }
     }
 }
