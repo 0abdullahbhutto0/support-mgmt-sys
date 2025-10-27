@@ -56,7 +56,7 @@ if ($_SESSION['role'] == 'admin') {
     }
 }else{
     echo "User doesnt have admin privileges";
-        echo "<br><a href='user.php'>Go back to User Page</a>";
+        echo "<br><a class='resolved-head' href='user.php'>Go back to User Page</a>";
         exit();
 }
 
