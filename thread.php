@@ -106,6 +106,7 @@ if ($_SESSION['logged_in'] == true) {
             $current_date_time = date('Y-m-d H:i:s');
             $sql_date_upd = "UPDATE tickets SET updated_at = '{$current_date_time}' WHERE id = {$_SESSION['ticket_id']}";
             mysqli_query($conn, $sql_date_upd);
+            header("Location: thread.php");
         }
         echo "<h3 class='resolved-head'>Current Status: {$row['status']}</h3><br>
         <div class='status-submit'>

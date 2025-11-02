@@ -89,10 +89,12 @@ if ($_SESSION['logged_in'] == true) {
             exit();
         }
         if (isset($_POST['create'])) {
-            if (!empty($_POST['subject']) || !empty($_POST['description'])) {
-                $sql = "INSERT INTO tickets(user_id, subject, description, status) VALUES ('$id', '{$_POST['subject']}', '{$_POST['description']}', 'Sent')";
+            $subject=mysqli_real_escape_string($conn, $_POST['subject'] );
+            $desc=mysqli_real_escape_string($conn,$_POST['description'] );
+            if (!empty(trim($subject)) || !empty(trim($desc))) {
+                $sql = "INSERT INTO tickets(user_id, subject, description, status) VALUES ('$id', '{$subject}', '{$desc}', 'Sent')";
                 mysqli_query($conn, $sql);
-                echo "Ticket Posted!";
+                echo "<h2 class='resolved-head'>Ticket Posted!</h2>";
             } else {
                 echo "Please enter all the details";
             }

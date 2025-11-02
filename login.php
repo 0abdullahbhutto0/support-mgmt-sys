@@ -33,9 +33,9 @@ if (isset($_SESSION['logged_in'])) {
 include("database.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    if (empty($username) || empty($password)) {
+    $username = mysqli_real_escape_string($conn, $_POST['username']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
+    if (empty(trim($username)) || empty(trim($password))) {
         echo "<h2 class='resolved-head'>Please enter all the credentials.</h2>";
     } else {
         $sql = "SELECT password, name, id, role FROM users WHERE username = '$username'";
@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $row = mysqli_fetch_assoc($result);
 
         if (!isset($row['password'])) {
-            echo "<h2 class='resolved-head'>Invalid username</h2>";
+            echo "<h2 class='resolved-head'>Invalid Login Info.</h2>";
             exit();
         }
         $pass = $row['password'];
