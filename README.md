@@ -79,7 +79,7 @@ Clone the repository to your local machine:
 - Resolution: Move tickets through workflow stages to resolution
 
 ## Project Structure
-
+```
 support-mgmt-sys/
 ├── index.php
 ├── login.php
