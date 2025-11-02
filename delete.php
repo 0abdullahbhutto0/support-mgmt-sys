@@ -42,7 +42,7 @@ if ($_SESSION['role'] == 'admin') {
                 $sql = "DELETE FROM tickets WHERE id = {$_SESSION['ticket_id']}";
                 mysqli_query($conn, $sql);
                 echo "<h2 class='resolved-head' style='font-size: 25px;'>Ticket deleted!</h2>";
-                echo "<a href='admin.php'>Go Back</a>";
+                echo "<a href='admin.php' class='resolved-head'>Go Back</a>";
                 exit();
             } else if (strtolower($_POST['confirmtext']) == 'no') {
                 header("Location: admin.php");
