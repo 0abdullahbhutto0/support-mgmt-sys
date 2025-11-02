@@ -96,7 +96,7 @@ if ($_SESSION['logged_in'] == true) {
                 mysqli_query($conn, $sql);
                 echo "<h2 class='resolved-head'>Ticket Posted!</h2>";
             } else {
-                echo "Please enter all the details";
+                echo "<h2 class='resolved-head'>Please enter all the details!</h2>";
             }
         }
         $sql = "SELECT * FROM tickets WHERE user_id = $id";

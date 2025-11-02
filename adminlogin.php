@@ -33,9 +33,9 @@ if (isset($_SESSION['logged_in'])) {
 include("database.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    if (empty($username) || empty($password)) {
+    $username = mysqli_real_escape_string($conn, $_POST['username']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
+    if (empty(trim($username)) || empty(trim($password))) {
         echo "<h2 class='resolved-head'>Please enter all the credentials.</h2>";
     } else {
 
