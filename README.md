@@ -8,15 +8,6 @@ This application streamlines support operations by providing an organized platfo
 - [Technology Stack](#technology-stack)
 - [System Requirements](#system-requirements)
 - [Installation](#installation)
-- [Database Setup](#database-setup)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
-- [Security Considerations](#security-considerations)
-- [Future Enhancements](#future-enhancements)
-- [Screenshots](#screenshots)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
 
 ## Features
 
