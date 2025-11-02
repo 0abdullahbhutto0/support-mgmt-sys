@@ -64,6 +64,6 @@ This application streamlines support operations by providing an organized platfo
 ## Installation
 
 Clone the repository to your local machine:
-git clone https://github.com/yourusername/support-mgmt-sys.git
-Move the project folder to your web server directory:
-XAMPP: C:\xampp\htdocs\support-mgmt-sys
+- git clone https://github.com/yourusername/support-mgmt-sys.git
+- Move the project folder to your web server directory:
+- XAMPP: C:\xampp\htdocs\support-mgmt-sys
