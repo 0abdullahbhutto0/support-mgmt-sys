@@ -29,7 +29,7 @@ This application streamlines support operations by providing an organized platfo
 - Respond to tickets via threaded comments
 - Delete tickets with cascading comment removal
 - Separate views for open and resolved tickets
-- Advanced search and filtering capabilities
+- Advanced search and filtering capabilities 
 
 ### System Features
 - Role-based access control (User/Admin)
